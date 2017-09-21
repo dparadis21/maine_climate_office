@@ -1,0 +1,190 @@
+#content-wrap {
+	overflow: hidden;
+	padding: 0px;
+	margin: 0px auto 0px auto;
+	min-height: 800px;
+	width: 100%; /*1024px;*/
+	max-width: 1500px;
+	min-width: 1024px;
+	background-color: white;
+}
+
+h2 {
+	font-family: "Open Sans", sans-serif;
+	font-size: 1.8em;
+	font-weight: 200;
+	width: 100%;
+	margin: 40px auto 30px auto;
+	color: rgb(96,96,96);
+	background-color: none;
+	text-align: center;
+}
+
+.h3 {
+	font-family: "Open Sans", sans-serif;
+	font-size: 1.2em;
+	font-weight: 200;
+	width: 100%;
+	margin-top: 30px;
+	color: rgb(96,96,96);
+	background-color: none;
+	text-align: center;
+}
+
+#left-panel {
+	float: none;
+	display: inline-block;
+	vertical-align: top;
+	text-align: center;
+	margin: auto;
+	width: 41%;
+	max-width: 525px;
+	background: transparent;
+	z-index: 2;
+}
+
+#right-panel {
+	float: none;
+	display: inline-block;
+	vertical-align: top;
+	text-align: center;
+	width: 58%;
+	height: auto;
+	background: transparent;
+	z-index: 2;
+}
+
+#img0 {
+	margin: 0px auto 0px auto;
+	/*
+	position: relative;
+	width: 525px;
+	height: 815px;
+	*/
+	width: 100%;
+	background: transparent;
+	z-index: 0;
+	vertical-align: top;
+	/*
+	object-fit: contain;
+	*/
+}
+.helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: top;
+}
+
+select {
+	margin: 0px 0px 0px 0px;
+	width: auto;
+	padding: 5px;
+	height: auto;
+	background: transparent;
+	border: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	outline: 0;	/*prevents blue outline from appearing after click*/
+}
+
+select,#domain,#param,#month,#year {
+	/*font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;*/
+	font-family: "Helvetica Neue", Helvetica, "Open Sans", Arial, sans-serif;
+	font-size: 24px;
+	color: rgb(24,24,24);
+	/* The following removes the dropdown arrow in Firefox */
+	/* https://gist.github.com/joaocunha/6273016/ */
+	-moz-appearance: none;
+	text-indent: 0.01px;
+	text-overflow: '';
+	padding: 2px;
+}
+
+.fnt_legend {
+	font-family: "Helvetica Neue", Helvetica, "Open Sans", Arial, sans-serif;
+	font-size: 16px;
+	color: rgb(80,80,80);
+}
+
+#domain {
+	margin-left: 130px;
+}
+#param,#month {
+	/*float: left;*/
+}
+
+#year_table_wrapper {
+	clear: left;
+	padding: none;
+	width: auto;
+	height: auto;
+	margin: 15px 0px 25px 0px;
+	display: block;
+	background-color: none;
+}
+.table_ul {
+    list-style: none;
+    padding-left: 0;
+	margin-left: 0px;
+	width: 375px;
+	list-style-type: none;
+	display: block;
+	margin: auto;
+	text-align: left;
+	line-height: 18px;
+	background-color: none;
+}
+.table_ul li {
+	display: inline-table;
+	padding: 0px 2px 0px 2px;
+	text-align: center;
+	vertical-align: middle;
+}
+.year_select {
+	width: 2px;
+	height: 5px;
+	margin: 0px;
+	border: 6px solid rgb(255,255,255);
+	background-color: rgb(0,0,0);
+}
+.year_select:hover,.selectedflat {
+	background-color: rgb(255,160,0);
+}
+
+#tseries_image {
+	clear: both;
+	float: right;
+	margin: 25px auto 0px auto;
+	width: 95%;
+	height: 450px;
+	margin-left: 0px;
+}
+
+#tseries_image2 {
+	clear: both;
+	margin: 5px auto 0px auto;
+	width: 98%;
+	height: 630px;
+}
+
+#image_link, #image_link2 {
+	position: absolute;
+	margin: auto;
+	width: 150px;
+	right: -50px;
+	bottom: 13px;
+}
+
+.counties :hover {
+  fill: red;
+}
+
+.county-borders {
+  fill: none;
+  stroke: #000;
+  stroke-width: 0.5px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  pointer-events: none;
+}

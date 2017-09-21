@@ -1,0 +1,261 @@
+html {
+	overflow-Y: scroll;
+	overflow: -moz-scrollbars-vertical;
+}
+html,body {
+	width: 100%;
+	height: 100%;
+	margin: auto;
+	font-family: "Palatino Linotype", "Book Antiqua", Palatino, "Times New Roman", Times, serif;
+	/*font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;*/
+	font-family: Arial, Open Sans, sans-serif; font-size: 16px; font-style: normal; font-weight: normal;
+	color: rgb(96,96,96);
+	background-color: white;		/* NOTE: must change background-color for #wrap_all as well */
+}
+h1 {
+	font-size: 1.5em;
+	font-weight: normal;
+	text-decoration: none;
+	color: rgb(72,72,72);
+}
+h2 {
+	font-size: 1.25em;
+	font-weight: normal;
+	font-style: italic;
+	text-decoration: none;
+	color: rgb(72,72,72);
+}
+p {
+	font-size: 1em;
+}
+
+#wrap_all {
+	clear: both;
+	width: 100%;
+	height: auto !important;
+	height: 100%;
+	min-height: 100%;
+	background-color: white;
+	margin: 0 auto -340px;	/* NOTE: bottom margin must = negative of footer height */
+}
+
+#content-wrap {
+	overflow: hidden;
+	width: 100%;
+	max-width: 1680px;
+	min-width: 1024px;
+	height: auto;
+    min-height: 100%;
+	margin: auto;
+	/*margin-top: 0px;*/
+	text-align: center;
+	color: rgb(0,0,0);
+	background-color: white;
+}
+
+
+/*--- Header ---------------------------------------------------------------------------------------------------------*/
+#header {
+	min-width: 1024px;
+}
+
+#header h1 {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	/*font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;*/
+	/*font-family: "Open Sans",sans-serif;*/
+	font-size: 72px;
+	font-weight: 300; /* 100,200...400=normal...700=bold...to 900*/
+	text-shadow: 1px 1px rgb(0,0,0);
+	text-decoration: none;
+	color: rgb(255,255,255);
+	margin: 0px 0px 40px 0px;
+	top: 0px;
+	text-align: center;
+}
+
+#top_banner {
+	width: 100%;
+	height: 300px;
+	position: relative;
+	/*
+	background-image: url('img/SBP_CompassPond_012b_banner.jpg');
+	background-image: url('../img/SBP_RockyPond_005c_banner2.jpg');
+	background-image: url('../img/SBP_Schoodic_014_banner2.jpg');
+	background-image: url('../img/SBP_JordanPond_002d_banner4.jpg');
+	background-image: url('../img/SBP_ANP_050c_banner.jpg');
+	background-image: url('../img/SBP_OtterCliffs_006b_1915x650.jpg');
+	background-image: url('../img/SBP_ANP_026_banner.jpg');
+	*/
+	background-image: url('../img/SBP_JordanPond_002e_banner.jpg');
+	/*background-attachment: fixed;*/
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: right bottom;
+}
+#menu-wrap {
+	font-family: "Open Sans", sans-serif;
+	font-size: 18px;	/*1.1em;*/
+	font-weight: 200;
+	width: 100%;
+	height: 50px;
+	color: rgb(255,255,255);
+	background-color: rgb(28,33,41);
+	text-align: center;
+	margin: auto;
+	float: none;
+}
+#menu-top a {
+	color: rgb(240,240,240); text-shadow: 1px 1px rgb(64,64,64); text-decoration: none;
+}
+ul {
+	font-family: "Open Sans", sans-serif;
+	font-size: 18px;	/*1.1em;*/
+	font-weight: 200;
+	width: 595px;
+	height: 50px;
+	color: rgb(240,240,240);
+	background-color: none;
+	text-align: center;
+	list-style-type: none;
+	margin: auto;
+	padding: 0;
+	overflow: hidden;
+}
+li {
+	float: left;
+}
+li a, .dropbtn {
+	display: inline-block;
+	text-align: center;
+	padding: 14px 20px;
+	text-decoration: none;
+	background-color: none; /*rgb(28,33,41);*/
+	/* this is for boxes on menubar */
+	/*width: 110px;*/
+}
+li a:hover, .dropdown:hover .dropbtn {
+	color: rgb(25,255,255);
+	background-color: rgb(32,96,236);
+}
+li a:active, .dropdown:active .dropbtn {
+	color: rgb(255,255,255);
+	background-color: rgb(32,96,236);
+}
+li a:link, .dropdown:link .dropbtn {
+	background-color: none;
+}
+li a:visited, .dropdown:visited .dropbtn {
+	background-color: none;
+}
+li.dropdown {
+	display: inline-block;
+}
+.dropdown-content {
+	display: none;
+	position: absolute;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	background-color: rgb(96,96,96);
+}
+.dropdown-content a {
+	color: rgb(240,240,240);
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+	text-align: left;
+}
+.dropdown-content a:hover {background-color: rgb(32,96,236);}
+.dropdown:hover .dropdown-content {display: block;}
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+
+/*--- Page Titles ----------------------------------------------------------------------------------------------------*/
+.page_title {
+	margin: auto;
+	padding: 20px 0px 20px 0px;
+	max-width: 1680px;
+	min-width: 1024px;
+	background-color: white;
+}
+.page_title h1 {
+	margin: 0px auto 0px auto;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 1.6em;
+	font-weight: 200;
+	text-align: center;
+	text-decoration: none;
+	color: rgb(96,96,96);
+}
+hr.style-standard {
+	border-color: rgb(144,144,144);			/* Chrome and Safari */
+	background-color: rgb(144,144,144);		/* Firefox and Opera */
+	color: rgb(144,144,144);				/* IE7+ */
+	border-width: 1px;
+}
+/* https://css-tricks.com/examples/hrs/ */
+/* Gradient transparent - color - transparent */
+hr.style-gradient {
+	border: 0;
+	height: 1px;
+	background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+
+/*--- Footer ---------------------------------------------------------------------------------------------------------*/
+.push {
+	/* NOTE: .push height must = #footer height, and #wrap_all margin must = negative of #footer height WITHOUT the top margin value.       */
+	/* Example: #footer height = 625px, #footer top margin = 30px, #wrap_all top margin = -625px, .push height = 655px*/
+	/* Refer to "sticky footer" http://ryanfait.com/resources/footer-stick-to-bottom-of-page/                         */
+	height: 340px;
+}
+#footer {
+	margin: 0px auto 0px auto;
+	width: 100%;
+	min-width: 1024px;
+	height: 340px;
+	padding: 0px;
+	text-align: center;
+	font-family: Arial, Open Sans; font-size: 15px; font-style: normal; font-weight: normal;
+	line-height: 20px;
+	color: rgb(204,204,204);
+	background-color: rgb(80,80,80);
+}
+/* http://stackoverflow.com/questions/18790844/how-to-center-3-divs-in-the-middle-of-the-page */
+#footer .left {
+	width: 300px;
+	height: auto;
+	padding: 30px 12px 0px 12px;
+	text-align: left;
+	float: none;
+	display: inline-block;
+	vertical-align: top;
+}
+#footer .center {
+	width: 300px;
+	height: auto;
+	padding: 30px 12px 0px 12px;
+	text-align: left;
+	float: none;
+	display: inline-block;
+	vertical-align: top;
+}
+#footer .right {
+	width: 300px;
+	height: auto;
+	padding: 30px 12px 0px 12px;
+	text-align: left;
+	float: none;
+	display: inline-block;
+	vertical-align: top;
+}
+#footer h1 {
+	line-height: 20px;
+	text-align: left;
+	font-family: Arial, Open Sans; font-size: 15px; font-style: normal; font-weight: bold;
+	color:rgb(244,244,244);
+}
+#footer a:link    {color:rgb(244,244,244);}
+#footer a:visited {color:rgb(244,244,244);}
+#footer a:hover   {color:rgb(255,160,64);}
+#footer a:active  {color:rgb(255,255,255);}
+/*--------------------------------------------------------------------------------------------------------------------*/

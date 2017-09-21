@@ -1,0 +1,199 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<title>Maine State Climate Office</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=1024, user-scalable=yes, minimum-scale=0.3, maximum-scale=2.0">
+		<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="js/window_size.js"></script>
+		<script type="text/javascript" src= "https://d3js.org/d3.v4.min.js"></script>
+		<script src="https://d3js.org/d3.v4.min.js"></script>
+		<script src="https://d3js.org/topojson.v2.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/all_pages.css?v=001">
+		<link rel="stylesheet" type="text/css" href="css/monthly.css?v=001">
+		<link rel="icon" type="image/png" href="http://cci-reanalyzer.org/logos/favicon_32x32.png">
+	</head>
+	
+	<body onresize="window_size(0)">
+		
+		<!-- ******** BEGIN HEADER ******** -->
+		<div id="header">
+			<div id="top_banner">
+				<div id="MSCO_div" style="width:100%; padding-top:45px;">
+					<h1 id="MSCO_h1">Maine State Climate Office</h1>
+				</div>
+			</div>
+
+			<!--http://www.w3schools.com/css/tryit.asp?filename=trycss_dropdown_navbar-->
+			<div id="menu-wrap" style="position:relative; z-index:10;">
+				<ul id="menu-top">
+					<li><a href="#home">Home</a></li>
+					<!--<li><a href="http://pamola.um.maine.edu/MaineClimate/climate.php" target="_top">Climate</a></li>-->
+					<li class="dropdown">
+						<a href="javascript:void(0)" class="dropbtn">Climate</a>
+						<div class="dropdown-content">
+							<a href="http://pamola.um.maine.edu/MaineClimate/clim/monthly.php">Monthly Data</a>
+							<a href="http://pamola.um.maine.edu/MaineClimate/clim/daily.php">Daily Data</a>
+						</div>
+					</li>
+					<li class="dropdown">
+						<a href="javascript:void(0)" class="dropbtn">Weather</a>
+						<div class="dropdown-content">
+							<a href="http://pamola.um.maine.edu/MaineClimate/wx/global.php">Today's Global Weather</a>
+							<a href="http://pamola.um.maine.edu/MaineClimate/wx/">U.S. Regional Forecast Maps</a>
+							<a href="http://pamola.um.maine.edu/MaineClimate/wx/outlook.php">U.S. Seasonal Outlook Maps</a>
+							<a href="http://pamola.um.maine.edu/MaineClimate/wxag/">U.S. Northeast WxAg</a>
+						</div>
+					</li>
+					<li class="dropdown">
+						<a href="javascript:void(0)" class="dropbtn">Newsdesk</a>
+						<div class="dropdown-content">
+							<a href="http://pamola.um.maine.edu/MaineClimate/news/">Climate Summaries</a>
+						</div>
+					</li>
+					<li><a href="#researchers">Researchers</a></li>
+					<li><a href="#resources">Resources</a></li>
+				</ul>
+			</div>
+		</div>
+		<!-- ******** END HEADER ******** -->
+		
+		<div id="content-wrap">
+			
+			<div class="page_title">
+				<h1>Monthly Climate Data</h1>
+				<hr class="style-gradient" style="margin-top:20px;">
+			</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			<!-- *************** Here is the image that needs an html5 canvas overlay for county outlines ********** -->
+			<div id="left-panel">
+				<img id="img0" src="png/PRISM_ME-LC_T2_anom_1923-13.png" border=0>
+			</div>
+			<!-- *************** Here is the image that needs an html5 canvas overlay for county outlines ********** -->
+			<svg width="525" height="815"></svg>
+			<script src="https://d3js.org/d3.v4.min.js"></script>
+			<script src="https://d3js.org/topojson.v2.min.js"></script>
+			<script>
+			var svg = d3.select("svg");
+
+			var path = d3.geoPath();
+
+			d3.json("json/maine.json", function(error, maine) {
+				if (error) throw error;
+
+				svg.append("g")
+			    	.attr("class", "counties")
+			    .selectAll("path")
+			    .data(topojson.feature(maine, maine.COUNTIES).features)
+			    .enter().append("path")
+			      	.attr("d", path);
+
+			  	svg.append("path")
+			    	.attr("class", "county-borders")
+			      	.attr("d", path(topojson.mesh(maine, maine.COUNTIES, function(a, b) { return a !== b; })));
+			});
+			</script>
+			
+			
+			
+			
+			
+			
+			
+			<div id="right-panel">
+				<fieldset style="float:left; margin-left:30px; border:none;">
+					<legend class="fnt_legend" align="left">Select Variable &amp; Time Interval</legend>
+					<select id="param" onChange="javascript: console.log('Test variable select...')">
+						<option value="T2_anom">Avg Temperature Anomaly</option>
+						<option value="T2">Avg Temperature</option>
+						<option value="T2_max">Max Temperature</option>
+						<option value="T2_min">Min Temperature</option>
+						<option value="PRCP_anom">Precipitation Anomaly</option>
+						<option value="PRCP">Precipitation</option>
+					</select>
+					<!-- select: dir="rtl" aligns selection text to the right... -->
+					<select id="month" style="margin-left:15px;" onChange="javascript: console.log('Test month select...')">
+					<!--<select id="month" style="clear:left; float:left; margin: 0px auto 15px 55px;" onChange="javascript: update_month(),load_images(),update_image()">-->
+						<option value="01">January</option>
+						<option value="02">February</option>
+						<option value="03">March</option>
+						<option value="04">April</option>
+						<option value="05">May</option>
+						<option value="06">June</option>
+						<option value="07">July</option>
+						<option value="08">August</option>
+						<option value="09">September</option>
+						<option value="10">October</option>
+						<option value="11">November</option>
+						<option value="12">December</option>
+						<option value="13">Annual (Jan-Dec)</option>
+						<option value="14">Winter (DJF)</option>
+						<option value="15">Spring (MAM)</option>
+						<option value="16">Summer (JJA)</option>
+						<option value="17">Fall (SON)</option>
+					</select>
+				</fieldset>
+				
+				<!-- this is the holder div for highcharts timeseries chart, but highcharts disabled for now -->
+				<div id="tseries_image"></div>
+				
+				<a id="csv_file" style="margin: 10px 10px auto 0px; float:right;" href="NULL">
+					Download Spreadsheet (CSV)</a>
+				
+			</div>
+		</div>
+		
+		<div style="clear:both; height:30px;"></div>
+		
+		<script type=text/javascript>
+			$(window).load(function() {
+				initialize();
+			});
+			img0_width=$('#img0').width();
+			img0_height=$('#img0').height();
+			var img0_ratio=img0_width/img0_height;
+			window_size(0);
+		</script>
+		
+		<!-- ******** BEGIN FOOTER ******** -->
+		<div id="footer">
+			<div class="left">
+				<h1 style="font-size:18px; font-weight:200;">Climate Reanalyzer<span style="font-size:16px;">&#0153;</span></h1>
+				<p>This website is produced by the 
+				<a href="http://climatechange.umaine.edu" target="_blank">Climate Change Institute</a> 
+				at the <a href="http://www.umaine.edu" target="_blank">University of Maine</a>. 
+				Our institute has more than a 40-year history of polar exploration, and research 
+				contributions to glaciology, climate science, and anthropology.
+				<p>Climate Reanalyzer utilizes and provides access to existing publicly-available 
+				datasets and models. Original data sources are provided on the 
+				<a href="http://cci-reanalyzer.org/about/datasets.php" target="_blank">Available Datasets</a> page.
+			</div>
+			<div class="center">
+				<h1 style="font-size:18px; font-weight:200;">How to Reference</h1>
+				<p>Please cite both original <a href="http://cci-reanalyzer.org/about/datasets.php" target="_blank">
+				data sources</a> and Climate Reanalyzer for any data or images from this website appearing in 
+				journal publications. Suggested reference:
+				<p><i>"[Data/Image] obtained using Climate Reanalyzer (http://cci-reanalyzer.org),
+				Climate Change Institute, University of Maine, USA."</i>
+			</div>
+			<div class="right">
+				<h1 style="font-size:18px; font-weight:200;">Disclaimer</h1>
+				<p>We make every effort to provide datasets and visualizations that are 
+				accurate and error-free. Please report bugs to the contact e-mail below.
+				<p><h1 style="font-size:18px; font-weight:200;">Contact</h1>
+				<p>E-mail <a href="mailto:reanalyzer@gmail.com" target="_blank">reanalyzer@gmail.com</a> or 
+				visit Climate Reanalyzer on <a href="https://www.facebook.com/ClimateReanalyzer" target="_blank">Facebook</a>.
+			</div>
+		</div>
+		<!-- ******** END FOOTER ******** -->
+		
+	</body>
+</html>

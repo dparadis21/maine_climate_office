@@ -1,0 +1,22 @@
+Order Allow,Deny
+Allow from all
+
+IndexIgnore *.miff
+
+<FilesMatch "\.(gif)$">
+  Order Deny,Allow
+  Allow from all
+</FilesMatch>
+
+# ----------------------------------------------------------------------
+# Allow loading of external files
+# ----------------------------------------------------------------------
+<FilesMatch "\.(json|kml|png|jpg|gif|svg)$">
+    Header set Access-Control-Allow-Origin "*"
+</FilesMatch>
+
+#https://betterexplained.com/articles/how-to-optimize-your-site-with-http-caching/
+# cache images for 10 mins
+<FilesMatch "\.(png|jpg|gif|pdf)$">
+    Header set Cache-Control "max-age=600"
+</FilesMatch>
