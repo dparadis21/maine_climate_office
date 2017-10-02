@@ -11,21 +11,38 @@ print "Climate Change Institute; University of Maine; USA (http://climatechange.
 print "KEY -- TMIN/TMAX/TMEAN = Temperature min/max/mean; PRCP = Precipitation; SNOW = Snowfall; SNWD = Snowdepth; WESD = Water Equiv. Snowdepth; WESN = Water Equiv. Snowfall\n";
 print "UNITS -- TMIN/TMAX/TMEAN deg C; PRCP mm; SNOW/SNWD/WESD/WESN cm;\n";
 print "=======================================================================================================================================================================\n";
+print"    Time,      Year,      Month,      Day,     DAYN,      TMIN,      TMAX,      TMEAN,      PRCP,      SNOW,      SNWD,\n";
+
+my @tmin;
+my @tmax;
+my @tavg;
+my @prcp;
+my @snow;
+my @snwd;
 
 my $file = 'test.dly';
 my $id;
 my $year;
-my $prevYear = 0000;
+my $prevYear = 0;
+my $prevMonth = 0;
 my $month;
+my @daysInMonth = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+my $dayn;
 my $day;
 my $element;
-my $value;
-my $mflag;
-my $qflag;
-my $sflag;
 my $i;
+my $j;
 
 open my $info, $file or die "Could not open $file: $!";
+
+for ($i = 0; $i < 31; $i++) {
+	$tmin[$i] = -9999;
+	$tmax[$i] = -9999;
+	$tavg[$i] = -9999;
+	$prcp[$i] = -9999;
+	$snow[$i] = -9999;
+	$snwd[$i] = -9999;
+}
 
 while (my $line = <$info>)  {
 	$id = substr($line, 0, 11);
@@ -33,20 +50,43 @@ while (my $line = <$info>)  {
 	$month = substr($line, 15, 2);
 	$element = substr($line, 17, 4);
 
-	if ($prevYear != $year)
-		$day = 1;
-
-	print "$id,$year $month $element";
-
-	for ($i = 0; $i < 31; $i++) {
-		$value = substr($line, $i * 8 + 21, 5);
-		$mflag = substr($line, $i * 8 + 26, 1);
-		$qflag = substr($line, $i * 8 + 27, 1);
-		$sflag = substr($line, $i * 8 + 28, 1);
-
-		print "$value $mflag $qflag $sflag";
+	$j = $daysInMonth[$month - 1];
+	if ($month == 2 && isLeapYear($year)) {
+		$j = 29;
 	}
-	print "\n";
+
+	if ($prevYear != $year) { # if a new year
+		$dayn = 0;
+		$prevYear = $year;
+	}
+
+	if ($prevMonth != $month) { # if a new month
+		for ($i = 0; $i < $j; $i++) {
+			$day = $i + 1;
+			$dayn++;
+			print "$year, $month, $day, $dayn, $tmin[$i], $tmax[$i], $tavg[$i], $snow[$i], $snwd[$i]\n";
+		}
+
+		$prevMonth = $month;
+		$day = 1;
+	}
+
+	for ($i = 0; $i < $j; $i++) {
+		if ($element eq "TMIN") {$tmin[$i] = substr($line, $i * 8 + 21, 5);}
+		if ($element eq "TMAX") {$tmax[$i] = substr($line, $i * 8 + 21, 5);}
+		if ($element eq "TAVG") {$tavg[$i] = substr($line, $i * 8 + 21, 5);}
+		if ($element eq "PRCP") {$prcp[$i] = substr($line, $i * 8 + 21, 5);}
+		if ($element eq "SNWD") {$snwd[$i] = substr($line, $i * 8 + 21, 5);}
+		if ($element eq "SNOW") {$snow[$i] = substr($line, $i * 8 + 21, 5);}
+	}
 }
 
+sub isLeapYear {
+	my ($y) = @_;
+	if ((($y % 4) == 0) && (($y % 100) != 0) || (($y % 400) == 0)) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
 close $info;
