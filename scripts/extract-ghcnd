@@ -2,7 +2,6 @@
 use strict;
 use warnings;
 
-print"\tYear,\tMonth,\tDay,\tDAYN,\tTMIN,\tTMAX,\tTMEAN,\tPRCP,\tSNOW,\tSNWD\n";
 
 my @tmin;
 my @tmax;
@@ -11,7 +10,7 @@ my @prcp;
 my @snow;
 my @snwd;
 
-my $file = $ARGV[0];
+my $file = substr($ARGV[0], 0, 11);
 my $id;
 my $year;
 my $prevYear = 0;
@@ -24,7 +23,12 @@ my $element;
 my $i;
 my $j;
 
-open my $info, $file or die "Could not open $file: $!";
+open (my $input, '<:encoding(UTF-8)', "$ARGV[0]") or die "Could not open $ARGV[0]: $!";
+open (my $json, '>', "$file.json") or die "Could not open $ARGV[0].json: $!";
+open (my $csv, '>', "$file.csv") or die "Could not open $file.json: $!";
+
+print $json "{\n";
+print $csv "\tYear,\tMonth,\tDay,\tDAYN,\tTMIN,\tTMAX,\tTMEAN,\tPRCP,\tSNOW,\tSNWD\n";
 
 for ($i = 0; $i < 31; $i++) {
 	$tmin[$i] = -9999;
@@ -35,7 +39,7 @@ for ($i = 0; $i < 31; $i++) {
 	$snwd[$i] = -9999;
 }
 
-while (my $line = <$info>)  {
+while (my $line = <$input>)  {
 	$id = substr($line, 0, 11);
 	$year = substr($line, 11, 4);
 	$month = substr($line, 15, 2);
@@ -64,13 +68,17 @@ while (my $line = <$info>)  {
 		for ($i = 0; $i < $j; $i++) {
 			$day = $i + 1;
 			$dayn++;
-			print "\t$year,\t   $month,\t  $day,\t   $dayn,\t$tmin[$i],\t$tmax[$i],\t$tavg[$i],\t$prcp[$i],\t$snow[$i],\t$snwd[$i]\n";
+			print $csv "\t$year,\t   $month,\t  $day,\t   $dayn,\t$tmin[$i],\t$tmax[$i],\t$tavg[$i],\t$prcp[$i],\t$snow[$i],\t$snwd[$i]\n";
+			print $json "{Year:$year,Month:$month,Day:$day,DAYN:$dayn,TMIN:$tmin[$i],TMAX:$tmax[$i],TMEAN:$tavg[$i],PRCP:$prcp[$i],SNOW:$snow[$i],SNWD:$snwd[$i]},\n";
 		}
 		$prevMonth = $month;
 		$day = 1;
 	}
 
 }
+
+print $json "}";
+
 sub isLeapYear {
 	my ($y) = @_;
 	if ((($y % 4) == 0) && (($y % 100) != 0) || (($y % 400) == 0)) {
@@ -79,4 +87,6 @@ sub isLeapYear {
 		return 0;
 	}
 }
-close $info;
+close $input;
+close $csv;
+close $json;
