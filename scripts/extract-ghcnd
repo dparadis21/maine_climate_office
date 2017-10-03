@@ -41,7 +41,7 @@ while (my $line = <$inventory>) {
 		$begin = substr($line, 36, 4);
 		$end = substr($line, 41, 4);
 
-		$lat =~ s/^\s+//;
+		$lat =~ s/^\s+//; # remove leading whitespace
 		$lon =~ s/^\s+//;
 	}
 }
@@ -51,7 +51,7 @@ close $inventory;
 while (my $line = <$station>) {
 	if (substr($line, 0, 11) eq $file) {
 		$name = substr($line, 41, 30);
-		$name =~ s/\s+$//;
+		$name =~ s/\s+$//; # remove trailing whitespace
 	}
 }
 
