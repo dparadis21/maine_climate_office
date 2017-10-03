@@ -113,6 +113,14 @@ while (my $line = <$input>)  {
 			print $csv "\t$year,\t   $month,\t  $day,\t   $dayn,\t$tmin[$i],\t$tmax[$i],\t$tavg[$i],\t$prcp[$i],\t$snow[$i],\t$snwd[$i]\n";
 			print $json "{Year:$year,Month:$month,Day:$day,DAYN:$dayn,TMIN:$tmin[$i],TMAX:$tmax[$i],TMEAN:$tavg[$i],PRCP:$prcp[$i],SNOW:$snow[$i],SNWD:$snwd[$i]},\n";
 		}
+		for ($i = 0; $i < 31; $i++) { # clears arrays so that the new months doesn't accidently get an old month's data
+			$tmin[$i] = -9999;
+			$tmax[$i] = -9999;
+			$tavg[$i] = -9999;
+			$prcp[$i] = -9999;
+			$snow[$i] = -9999;
+			$snwd[$i] = -9999;
+		}
 		$prevMonth = $month; # update variables and reset day
 		$day = 1;
 	}
