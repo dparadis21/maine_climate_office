@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-
+# arrays holding the elements for a month
 my @tmin;
 my @tmax;
 my @tavg;
@@ -10,29 +10,30 @@ my @prcp;
 my @snow;
 my @snwd;
 
-my $file = substr($ARGV[0], 0, 11);
-my $year;
-my $prevYear = 0;
-my $prevMonth = 0;
-my $month;
-my @daysInMonth = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
-my $dayn;
-my $day;
-my $element;
-my $i;
+my $file = substr($ARGV[0], 0, 11); # cuts out file extension
+my $year; # current year
+my $prevYear = 0; # previous year
+my $prevMonth = 0; # previous month
+my $month; # current month
+my @daysInMonth = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31); # lookup table for days in each month
+my $dayn; # day out of 365(6) for the year
+my $day; # day of month
+my $element; # string holding measurement abbreviation
+my $i; # loop counters
 my $j;
-my $lat;
-my $lon;
-my $begin;
-my $end;
-my $name;
+my $lat; # latitude
+my $lon; # longitude
+my $begin; # start year of data
+my $end; # end year of data
+my $name; # Name of station (eg: Orono, Bangor, Augusta, etc.)
 
-open (my $input, '<:encoding(UTF-8)', "$ARGV[0]") or die "Could not open $ARGV[0]: $!";
-open (my $inventory, '<:encoding(UTF-8)', "ghcnd-inventory.txt") or die "Could not open ghcdn-inventory.txt: $!";
-open (my $station, '<:encoding(UTF-8)', "ghcnd-stations.txt") or die "Could not open ghcdn-stations.txt: $!";
-open (my $json, '>', "$file.json") or die "Could not open $ARGV[0].json: $!";
-open (my $csv, '>', "$file.csv") or die "Could not open $file.json: $!";
+open (my $input, '<:encoding(UTF-8)', "$ARGV[0]") or die "Could not open $ARGV[0]: $!"; # opens a dly file passed as a command line argument
+open (my $inventory, '<:encoding(UTF-8)', "ghcnd-inventory.txt") or die "Could not open ghcdn-inventory.txt: $!"; # opens "ghcnd-inventory.txt"
+open (my $station, '<:encoding(UTF-8)', "ghcnd-stations.txt") or die "Could not open ghcdn-stations.txt: $!"; # opens "ghcnd-stations.txt"
+open (my $json, '>', "$file.json") or die "Could not open $ARGV[0].json: $!"; # creates a json file in the current directory named STATIONID.json
+open (my $csv, '>', "$file.csv") or die "Could not open $file.json: $!"; # creates a csv file in the current directory named STATIONID.csv
 
+# Extracts latitude, longitude, and start/end years from the ghcnd-inventory.txt file
 while (my $line = <$inventory>) {
 	if (substr($line, 0, 11) eq $file) {
 		$lat = substr($line, 12, 8);
@@ -46,6 +47,7 @@ while (my $line = <$inventory>) {
 }
 close $inventory;
 
+# Extracts station name from ghcnd-stations.txt file
 while (my $line = <$station>) {
 	if (substr($line, 0, 11) eq $file) {
 		$name = substr($line, 41, 30);
@@ -55,6 +57,7 @@ while (my $line = <$station>) {
 
 close $station;
 
+# Prints header
 print $csv "=======================================================================================================================================================================\n";
 print $csv "$name ($lat, $lon), $begin,$end\n";
 print $csv "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
@@ -68,6 +71,7 @@ print $csv "====================================================================
 print $json "{\n";
 print $csv "\tYear,\tMonth,\tDay,\tDAYN,\tTMIN,\tTMAX,\tTMEAN,\tPRCP,\tSNOW,\tSNWD\n";
 
+# fill arrays with placeholder values
 for ($i = 0; $i < 31; $i++) {
 	$tmin[$i] = -9999;
 	$tmax[$i] = -9999;
@@ -77,22 +81,23 @@ for ($i = 0; $i < 31; $i++) {
 	$snwd[$i] = -9999;
 }
 
+# parses the dly file line by line.  Each interation of the loop is each line, denoted by $line
 while (my $line = <$input>)  {
-	$year = substr($line, 11, 4);
-	$month = substr($line, 15, 2);
-	$element = substr($line, 17, 4);
+	$year = substr($line, 11, 4); # pulls year from the line
+	$month = substr($line, 15, 2); # pulls month from the line
+	$element = substr($line, 17, 4); # pulls which element is stored on this line
 
-	$j = $daysInMonth[$month - 1];
-	if ($month == 2 && isLeapYear($year)) {
+	$j = $daysInMonth[$month - 1]; # check which month this line is and store the number of days in j
+	if ($month == 2 && isLeapYear($year)) { # if it is a leap year and it if february then use 29 for days
 		$j = 29;
 	}
 
-	if ($prevYear != $year) { # if a new year
+	if ($prevYear != $year) { # if a new year reset dayn and update prevYear
 		$dayn = 0;
 		$prevYear = $year;
 	}
 
-	for ($i = 0; $i < $j; $i++) {
+	for ($i = 0; $i < $j; $i++) { # pull the value of a given element and store in the proper array
 		if ($element eq "TMIN") {$tmin[$i] = substr($line, $i * 8 + 21, 5);}
 		if ($element eq "TMAX") {$tmax[$i] = substr($line, $i * 8 + 21, 5);}
 		if ($element eq "TAVG") {$tavg[$i] = substr($line, $i * 8 + 21, 5);}
@@ -102,13 +107,13 @@ while (my $line = <$input>)  {
 	}
 
 	if ($prevMonth != $month) { # if a new month
-		for ($i = 0; $i < $j; $i++) {
+		for ($i = 0; $i < $j; $i++) { # loop through each array and print the values for each day on a new line
 			$day = $i + 1;
 			$dayn++;
 			print $csv "\t$year,\t   $month,\t  $day,\t   $dayn,\t$tmin[$i],\t$tmax[$i],\t$tavg[$i],\t$prcp[$i],\t$snow[$i],\t$snwd[$i]\n";
 			print $json "{Year:$year,Month:$month,Day:$day,DAYN:$dayn,TMIN:$tmin[$i],TMAX:$tmax[$i],TMEAN:$tavg[$i],PRCP:$prcp[$i],SNOW:$snow[$i],SNWD:$snwd[$i]},\n";
 		}
-		$prevMonth = $month;
+		$prevMonth = $month; # update variables and reset day
 		$day = 1;
 	}
 
@@ -116,7 +121,7 @@ while (my $line = <$input>)  {
 
 print $json "}";
 
-sub isLeapYear {
+sub isLeapYear { # checks if it is a leap year
 	my ($y) = @_;
 	if ((($y % 4) == 0) && (($y % 100) != 0) || (($y % 400) == 0)) {
 		return 1;
