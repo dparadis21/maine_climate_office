@@ -21,8 +21,8 @@ my $k;
 my $nvars = 0; # number of variables
 my $lat; # latitude
 my $lon; # longitude
-my $begin; # start year of data
-my $end; # end year of data
+my $begin = 9999; # start year of data
+my $end = 0; # end year of data
 my $name; # Name of station (eg: Orono, Bangor, Augusta, etc.)
 
 open (my $input, '<:encoding(UTF-8)', "$ARGV[0]") or die "Could not open $ARGV[0]: $!"; # opens a dly file passed as a command line argument
@@ -36,8 +36,8 @@ while (my $line = <$inventory>) {
 	if (substr($line, 0, 11) eq $file) {
 		$lat = substr($line, 12, 8);
 		$lon = substr($line, 21, 9);
-		$begin = substr($line, 36, 4);
-		$end = substr($line, 41, 4);
+		if (substr($line, 36, 4) < $begin) {$begin = substr($line, 36, 4)};
+		if (substr($line, 41, 4) > $end) {$end = substr($line, 41, 4)};
 		$header[$nvars] = substr($line, 31, 4);
 		$nvars++;
 
