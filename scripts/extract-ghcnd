@@ -3,12 +3,8 @@ use strict;
 use warnings;
 
 # arrays holding the elements for a month
-my @tmin;
-my @tmax;
-my @tavg;
-my @prcp;
-my @snow;
-my @snwd;
+my @header;
+my @values;
 
 my $file = substr($ARGV[0], 0, 11); # cuts out file extension
 my $year; # current year
@@ -21,6 +17,8 @@ my $day; # day of month
 my $element; # string holding measurement abbreviation
 my $i; # loop counters
 my $j;
+my $k;
+my $nvars = 0; # number of variables
 my $lat; # latitude
 my $lon; # longitude
 my $begin; # start year of data
@@ -40,6 +38,8 @@ while (my $line = <$inventory>) {
 		$lon = substr($line, 21, 9);
 		$begin = substr($line, 36, 4);
 		$end = substr($line, 41, 4);
+		$header[$nvars] = substr($line, 31, 4);
+		$nvars++;
 
 		$lat =~ s/^\s+//; # remove leading whitespace
 		$lon =~ s/^\s+//;
@@ -69,16 +69,17 @@ print $csv "UNITS -- TMIN/TMAX/TMEAN deg C; PRCP mm; SNOW/SNWD/WESD/WESN cm;\n";
 print $csv "=======================================================================================================================================================================\n";
 
 print $json "{\n";
-print $csv "\tYear,\tMonth,\tDay,\tDAYN,\tTMIN,\tTMAX,\tTMEAN,\tPRCP,\tSNOW,\tSNWD\n";
+print $csv "\tYear,\tMonth,\tDay,\tDAYN,";
+
+for ($i = 0; $i < $nvars; $i++) {
+	print $csv "\t$header[$i],";
+}
+
+print $csv "\n";
 
 # fill arrays with placeholder values
-for ($i = 0; $i < 31; $i++) {
-	$tmin[$i] = -9999;
-	$tmax[$i] = -9999;
-	$tavg[$i] = -9999;
-	$prcp[$i] = -9999;
-	$snow[$i] = -9999;
-	$snwd[$i] = -9999;
+for ($i = 0; $i < $nvars*31; $i++) {
+	$values[$i] = -9999;
 }
 
 # parses the dly file line by line.  Each interation of the loop is each line, denoted by $line
@@ -97,29 +98,34 @@ while (my $line = <$input>)  {
 		$prevYear = $year;
 	}
 
-	for ($i = 0; $i < $j; $i++) { # pull the value of a given element and store in the proper array
-		if ($element eq "TMIN") {$tmin[$i] = substr($line, $i * 8 + 21, 5);}
-		if ($element eq "TMAX") {$tmax[$i] = substr($line, $i * 8 + 21, 5);}
-		if ($element eq "TAVG") {$tavg[$i] = substr($line, $i * 8 + 21, 5);}
-		if ($element eq "PRCP") {$prcp[$i] = substr($line, $i * 8 + 21, 5);}
-		if ($element eq "SNWD") {$snwd[$i] = substr($line, $i * 8 + 21, 5);}
-		if ($element eq "SNOW") {$snow[$i] = substr($line, $i * 8 + 21, 5);}
+	for ($i = 0; $i < $nvars; $i++) { # pull the value of a given element and store in the proper array
+		if ($element eq $header[$i]) {
+			for ($k = 0; $k < $j; $k++) {
+				$values[$i*$j + $k] = substr($line, $k * 8 + 21, 5);
+			}
+		}
 	}
 
 	if ($prevMonth != $month) { # if a new month
 		for ($i = 0; $i < $j; $i++) { # loop through each array and print the values for each day on a new line
 			$day = $i + 1;
 			$dayn++;
-			print $csv "\t$year,\t   $month,\t  $day,\t   $dayn,\t$tmin[$i],\t$tmax[$i],\t$tavg[$i],\t$prcp[$i],\t$snow[$i],\t$snwd[$i]\n";
-			print $json "{Year:$year,Month:$month,Day:$day,DAYN:$dayn,TMIN:$tmin[$i],TMAX:$tmax[$i],TMEAN:$tavg[$i],PRCP:$prcp[$i],SNOW:$snow[$i],SNWD:$snwd[$i]},\n";
+			print $csv "\t$year,\t   $month,\t  $day,\t   $dayn,";
+			print $json "{Year:$year,Month:$month,Day:$day,DAYN:$dayn,";
+			for ($k = 0; $k < $nvars; $k++) {
+				if ($k != $nvars - 1) {
+					print $csv "\t$values[$k*$j + $i],";
+					print $json "$header[$k]:$values[$k*$j + $i],";
+				} else {
+					print $csv "\t$values[$k*$j + $i]";
+					print $json "$header[$k]:$values[$k*$j + $i]";
+				}
+			}
+			print $csv "\n";
+			print $json "},\n";
 		}
-		for ($i = 0; $i < 31; $i++) { # clears arrays so that the new months doesn't accidently get an old month's data
-			$tmin[$i] = -9999;
-			$tmax[$i] = -9999;
-			$tavg[$i] = -9999;
-			$prcp[$i] = -9999;
-			$snow[$i] = -9999;
-			$snwd[$i] = -9999;
+		for ($i = 0; $i < $nvars*31; $i++) { # clears arrays so that the new months doesn't accidently get an old month's data
+			$values[$i] = -9999;
 		}
 		$prevMonth = $month; # update variables and reset day
 		$day = 1;
